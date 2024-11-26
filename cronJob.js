@@ -27,12 +27,12 @@ const schedule = require('node-schedule')
 
 function setUpCronJob(client, chatId, messages) {
     const schedules = [
-        { time: '*/1 * * * *', message: messages[0] },
-        { time: '*/2 * * * *', message: messages[1] },
-        { time: '*/3 * * * *', message: messages[2] },
-        // { time: '30 8 * * *', message: message[0] }, // 8:30 AM
-        // { time: '45 11 * * *', message: message[1] }, // 11:45 AM
-        // { time: '0 20 * * *', message: messages[2] },  // 8:00 PM
+        // { time: '*/1 * * * *', message: messages[0] },
+        // { time: '*/2 * * * *', message: messages[1] },
+        // { time: '*/3 * * * *', message: messages[2] },
+        { time: '30 8 * * *', message: message[0] }, // 8:30 AM
+        { time: '45 11 * * *', message: message[1] }, // 11:45 AM
+        { time: '0 20 * * *', message: messages[2] },  // 8:00 PM
     ];
 
     schedules.forEach((scheduleItem, index) => {
