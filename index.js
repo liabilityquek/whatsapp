@@ -2,22 +2,28 @@ const { Client, Location, Poll, List, Buttons, LocalAuth } = require('whatsapp-w
 const qrcode = require('qrcode');
 const { setUpCronJob } = require('./cronJob'); // Import cron job logic
 require('dotenv').config(); // Load environment variables
+const puppeteer = require('puppeteer-extra');
+const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 const phoneNumbers = (process.env.PHONE_NUMBERS || '').split(',');
 const messages = JSON.parse(process.env.MESSAGE || '[]');
 
 let qrCodeImageUrl = null
 
+puppeteer.use(StealthPlugin());
+
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
         headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Ensure Puppeteer runs in a sandboxed environment
+        timeout: 60000, // Set timeout to 60 seconds
     }
 });
 
 client.on('qr', async (qr) => {
-    console.log('Generating QR code...');
     try {
+        console.log('Generating QR code...');
         qrCodeImageUrl = await qrcode.toDataURL(qr);
         console.log(`QR code URL generated successfully: ${qrCodeImageUrl}`); // Log the QR code URL to the consoleqrCodeImageUrl)
     } catch (err) {

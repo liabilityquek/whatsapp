@@ -24,6 +24,17 @@ const schedule = require('node-schedule')
 //         }
 //     })
 // }
+async function sendMessage(client, chatId, message) {
+    try {
+        console.log(`Attempting to send message: "${message}" to chatId: "${chatId}"`);
+        await client.sendMessage(chatId, message);
+        console.log('Message sent successfully');
+        // await sendEmail('Cron Job Success', 'Your scheduled message was sent successfully.');
+    } catch (error) {
+        console.error('Failed to send message:', error);
+        // await sendEmail('Cron Job Failed', `Error: ${error.message}`);
+    }
+}
 
 function setUpCronJob(client, chatId, messages) {
     const schedules = [
@@ -38,7 +49,7 @@ function setUpCronJob(client, chatId, messages) {
     schedules.forEach((scheduleItem, index) => {
         console.log(`Schedule ${index}: Time - ${scheduleItem.time}, Message - "${scheduleItem.message}"`);
 
-        schedule.scheduleJob(scheduleItem.time, () => {
+        schedule.scheduleJob(scheduleItem.time, async () => {
             console.log(`Cron job started at ${new Date().toLocaleString()}`);
             console.log(`Message to send: "${scheduleItem.message}"`);
 
@@ -50,17 +61,8 @@ function setUpCronJob(client, chatId, messages) {
             // schedule.scheduleJob('*/5 * * * * *', () => {
             //     console.log(`Cron job started at ${new Date().toLocaleString()}`);
             //     sendEmail('Cron Job Started', `Your scheduled job has started at ${new Date().toLocaleString()}.`);
-
-            client
-                .sendMessage(chatId, scheduleItem.message)
-                .then(() => {
-                    console.log('Message sent successfully');
-                    sendEmail('Cron Job Success', 'Your scheduled message was sent successfully.');
-                })
-                .catch((error) => {
-                    console.error('Failed to send message:', error);
-                    sendEmail('Cron Job Failed', `Error: ${error.message}`);
-                });
+            // });
+            await sendMessage(client, chatId, scheduleItem.message);
         });
     });
 }
