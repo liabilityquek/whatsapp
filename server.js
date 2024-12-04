@@ -8,12 +8,12 @@ app.get('/', (req, res) => {
     if (qrCodeImageUrl) {
         res.send(
             <div style="text-align: center;">
-                <h1>Scan the QR Code</h1>
-                <img src="${qrCodeImageUrl}" alt="QR Code" />
+                <h1>QR code image: </h1>
+                <img src="${qrCodeImageUrl}" alt="QR Code Image" />
             </div>
         )
     } else {
-        res.send('<h1>No QR Code Available</h1>')
+        res.send('<h1>QR image not available</h1>')
     }
 })
 
