@@ -7,7 +7,7 @@ let qrCodeImageUrl = null;
 // Initialize WhatsApp Web.js client
 const client = new Client({
     authStrategy: new LocalAuth({
-        dataPath: './.wwebjs_auth'
+        dataPath: '/persistent_storage/.wwebjs_auth'
     }),
     puppeteer: {
         headless: true,
