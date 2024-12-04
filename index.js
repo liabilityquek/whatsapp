@@ -18,7 +18,7 @@ client.on('qr', async (qr) => {
     try {
         console.log('Generating QR code...');
         qrCodeImageUrl = await qrcode.toDataURL(qr);
-        console.log('QR code generated successfully.');
+        console.log(`QR code generated successfully. QR code URL: ${qrCodeImageUrl}`);
     } catch (err) {
         console.error('Error generating QR code:', err);
     }
@@ -34,3 +34,10 @@ client.on('authenticated', () => {
 client.on('ready', () => {
     console.log('WhatsApp client is ready.');
 });
+
+client.on('disconnected', (reason) => {
+    console.log('Client was logged out:', reason);
+    process.exit();
+});
+
+client.initialize()
