@@ -1,10 +1,12 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 require('dotenv').config();
 const phoneNumber = process.env.PHONE_NUMBER
-const msgs = process.env.MESSAGE
+const msgs = JSON.parse(process.env.MESSAGE)
 // Initialize WhatsApp Web.js client
 const client = new Client({
-    authStrategy: new LocalAuth(),
+    authStrategy: new LocalAuth({
+        dataPath: './.wwebjs_auth'
+    }),
     puppeteer: {
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'], // Ensure Puppeteer runs in a sandboxed environment

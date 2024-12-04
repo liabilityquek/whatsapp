@@ -6,7 +6,9 @@ let qrCodeImageUrl = null;
 
 // Initialize WhatsApp Web.js client
 const client = new Client({
-    authStrategy: new LocalAuth(),
+    authStrategy: new LocalAuth({
+        dataPath: './.wwebjs_auth'
+    }),
     puppeteer: {
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'], // Ensure Puppeteer runs in a sandboxed environment
@@ -41,3 +43,5 @@ client.on('disconnected', (reason) => {
 });
 
 client.initialize()
+
+module.exports = { getQRCode: () => qrCodeImageUrl };
