@@ -1,7 +1,7 @@
+require('dotenv').config(); // Load environment variables
 const { Client, Location, Poll, List, Buttons, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 const { setUpCronJob } = require('./cronJob'); // Import cron job logic
-require('dotenv').config(); // Load environment variables
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
@@ -41,8 +41,7 @@ client.on('ready', () => {
     // Schedule a cron job for each phone number
     phoneNumbers.forEach((number) => {
         const chatId = `${number.replace('+', '')}@c.us`; // Fixed ID format
-        // console.log(`chatId: ${chatId}`);
-        setUpCronJob(client, chatId, messages); // Call the function from cronJobMonitoring.js
+        setUpCronJob(client, chatId, messages); // Call the function from cronJob.js
     });
 });
 
@@ -52,5 +51,6 @@ client.on('disconnected', (reason) => {
 });
 
 client.initialize();
+
 
 module.exports = { getQRCode: () => qrCodeImageUrl };
