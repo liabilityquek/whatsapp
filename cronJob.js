@@ -1,5 +1,6 @@
 // const nodemailer = require('nodemailer')
 const schedule = require('node-schedule')
+require('dotenv').config()
 
 // const transporter = nodemailer.createTransport({
 //     service: 'gmail',
@@ -37,35 +38,31 @@ async function sendMessage(client, chatId, message) {
 }
 
 function setUpCronJob(client, chatId, messages) {
-    const schedules = [
-        // { time: '*/1 * * * *', message: messages[0] },
-        // { time: '*/2 * * * *', message: messages[1] },
-        // { time: '*/3 * * * *', message: messages[2] },
-        { time: '30 8 * * *', message: message[0] }, // 8:30 AM
-        { time: '45 11 * * *', message: message[1] }, // 11:45 AM
-        { time: '0 20 * * *', message: messages[2] },  // 8:00 PM
-    ];
 
-    schedules.forEach((scheduleItem, index) => {
-        console.log(`Schedule ${index}: Time - ${scheduleItem.time}, Message - "${scheduleItem.message}"`);
+    const time = JSON.parse(process.env.TIME || '[]');
+    if (time.lenght !== messages.lenght) {
+        console.error('Error: TIME and MESSAGE arrays must have the same length.');
+        return
+    }
 
-        schedule.scheduleJob(scheduleItem.time, async () => {
-            console.log(`Cron job started at ${new Date().toLocaleString()}`);
-            console.log(`Message to send: "${scheduleItem.message}"`);
-
-            // Validate the message
-            if (typeof scheduleItem.message !== 'string' || scheduleItem.message.trim() === '') {
-                console.error(`Invalid message: "${scheduleItem.message}"`);
-                return;
-            }
-            // schedule.scheduleJob('*/5 * * * * *', () => {
-            //     console.log(`Cron job started at ${new Date().toLocaleString()}`);
-            //     sendEmail('Cron Job Started', `Your scheduled job has started at ${new Date().toLocaleString()}.`);
-            // });
-            await sendMessage(client, chatId, scheduleItem.message);
+    time.forEach((t, index) => {
+        const message = messages[index];
+        if (typeof message !== 'string' || message.trim() === '') {
+            console.error(`Invalid message at index: ${index}: ${message}`);
+        }
+        console.log(`Scheduling job for time: "${t}" and message: "${message}"`);
+        schedule.scheduleJob(cronTime, async () => {
+            console.log(`Cron job triggered at ${new Date().toLocaleString()} for message: "${message}"`);
+            await sendMessage(client, chatId, message);
         });
-    });
+    })
 }
+
+    // { time: '30 8 * * *', message: message[0] }, // 8:30 AM
+    // { time: '45 11 * * *', message: message[1] }, // 11:45 AM
+    // { time: '0 20 * * *', message: messages[2] },  // 8:00 PM
+
+
 module.exports = {
     setUpCronJob
 }

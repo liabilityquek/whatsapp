@@ -17,7 +17,6 @@ const client = new Client({
     puppeteer: {
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'], // Ensure Puppeteer runs in a sandboxed environment
-        timeout: 60000, // Set timeout to 60 seconds
     }
 });
 
@@ -42,12 +41,9 @@ client.on('ready', () => {
     // Schedule a cron job for each phone number
     phoneNumbers.forEach((number) => {
         const chatId = `${number.replace('+', '')}@c.us`; // Fixed ID format
+        console.log(`chatId: ${chatId}`);
         setUpCronJob(client, chatId, messages); // Call the function from cronJobMonitoring.js
     });
-});
-
-client.on('auth_failure', (msg) => {
-    console.error('Auth failure: ', msg);
 });
 
 client.on('disconnected', (reason) => {
