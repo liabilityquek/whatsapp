@@ -41,7 +41,7 @@ client.on('ready', () => {
     // Schedule a cron job for each phone number
     phoneNumbers.forEach((number) => {
         const chatId = `${number.replace('+', '')}@c.us`; // Fixed ID format
-        console.log(`chatId: ${chatId}`);
+        // console.log(`chatId: ${chatId}`);
         setUpCronJob(client, chatId, messages); // Call the function from cronJobMonitoring.js
     });
 });
