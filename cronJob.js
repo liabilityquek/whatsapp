@@ -40,7 +40,7 @@ async function sendMessage(client, chatId, message) {
 function setUpCronJob(client, chatId, messages) {
 
     const time = JSON.parse(process.env.TIME || '[]');
-    if (time.lenght !== messages.lenght) {
+    if (time.length !== messages.length) {
         console.error('Error: TIME and MESSAGE arrays must have the same length.');
         return
     }
@@ -51,7 +51,7 @@ function setUpCronJob(client, chatId, messages) {
             console.error(`Invalid message at index: ${index}: ${message}`);
         }
         console.log(`Scheduling job for time: "${t}" and message: "${message}"`);
-        schedule.scheduleJob(cronTime, async () => {
+        schedule.scheduleJob(t, async () => {
             console.log(`Cron job triggered at ${new Date().toLocaleString()} for message: "${message}"`);
             await sendMessage(client, chatId, message);
         });
